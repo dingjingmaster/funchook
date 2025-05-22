@@ -54,6 +54,8 @@ endif ()
 include(CheckCCompilerFlag)
 check_c_compiler_flag(-fvisibility=hidden HAVE_FVISIBILITY_HIDDEN)
 
+set(FUNCHOOK_DISASM "capstone")
+
 if (FUNCHOOK_DISASM STREQUAL capstone)
   set(DISASM_CAPSTONE 1)
 elseif (FUNCHOOK_DISASM STREQUAL distorm)
