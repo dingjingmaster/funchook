@@ -1,0 +1,3 @@
+[submodule "3thrd/capstone"]
+	path = 3thrd/capstone
+	url = git@github.com:dingjingmaster/capstone.git

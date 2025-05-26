@@ -89,24 +89,38 @@ endfunction(add_subdirectory_pic)
 # capstone
 #
 if (DISASM_CAPSTONE)
-  FetchContent_Declare(
-    capstone
-    GIT_REPOSITORY https://github.com/capstone-engine/capstone.git
-    GIT_TAG        5.0.1
-    GIT_SHALLOW    TRUE
-  )
-  FetchContent_GetProperties(capstone)
-  if(NOT capstone_POPULATED)
-    FetchContent_Populate(capstone)
-    string(TOUPPER ${FUNCHOOK_CPU} FUNCHOOK_CPU_UPPER)
-    set(CAPSTONE_BUILD_SHARED OFF CACHE BOOL "")
-    set(CAPSTONE_BUILD_STATIC_RUNTIME OFF CACHE BOOL "")
-    set(CAPSTONE_BUILD_TESTS OFF CACHE BOOL "")
-    set(CAPSTONE_BUILD_CSTOOL OFF CACHE BOOL "")
-    set(CAPSTONE_ARCHITECTURE_DEFAULT OFF CACHE BOOL "")
-    set(CAPSTONE_${FUNCHOOK_CPU_UPPER}_SUPPORT ON CACHE BOOL "")
-    add_subdirectory_pic(${capstone_SOURCE_DIR} ${capstone_BINARY_DIR})
-  endif()
+    include(ExternalProject)
+    ExternalProject_Add(libcapstone
+        PREFIX libcapstone
+        BINARY_DIR ${CMAKE_BINARY_DIR}/capstone
+        SOURCE_DIR ${CMAKE_SOURCE_DIR}/3thrd/capstone
+        CONFIGURE_COMMAND cd ${CMAKE_BINARY_DIR}/capstone
+                    && cmake -G "Unix Makefiles"
+                    -DCAPSTONE_BUILD_STATIC_LIBS=NO
+                    -DCAPSTONE_BUILD_SHARED_LIBS=OFF
+                    -S ${CMAKE_SOURCE_DIR}/3thrd/capstone
+                    -B ${CMAKE_BINARY_DIR}/capstone
+        INSTALL_COMMAND ""
+        STEP_TARGETS build
+    )
+    #FetchContent_Declare(
+    #capstone
+    #GIT_REPOSITORY https://github.com/capstone-engine/capstone.git
+    #GIT_TAG        5.0.1
+    #GIT_SHALLOW    TRUE
+    #)
+    #FetchContent_GetProperties(capstone)
+    #if(NOT capstone_POPULATED)
+    #FetchContent_Populate(capstone)
+    #string(TOUPPER ${FUNCHOOK_CPU} FUNCHOOK_CPU_UPPER)
+    #set(CAPSTONE_BUILD_SHARED OFF CACHE BOOL "")
+    #set(CAPSTONE_BUILD_STATIC_RUNTIME OFF CACHE BOOL "")
+    #set(CAPSTONE_BUILD_TESTS OFF CACHE BOOL "")
+    #set(CAPSTONE_BUILD_CSTOOL OFF CACHE BOOL "")
+    #set(CAPSTONE_ARCHITECTURE_DEFAULT OFF CACHE BOOL "")
+    #set(CAPSTONE_${FUNCHOOK_CPU_UPPER}_SUPPORT ON CACHE BOOL "")
+    #add_subdirectory_pic(${capstone_SOURCE_DIR} ${capstone_BINARY_DIR})
+    #endif()
 
   list(APPEND FUNCHOOK_DEPS capstone)
   set(DISASM capstone)
