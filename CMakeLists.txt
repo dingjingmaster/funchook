@@ -89,22 +89,22 @@ endfunction(add_subdirectory_pic)
 # capstone
 #
 if (DISASM_CAPSTONE)
-    include(ExternalProject)
-    if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/capstone)
-        ExternalProject_Add(libcapstone
-            PREFIX libcapstone
-            BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/capstone
-            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3thrd/capstone
-            CONFIGURE_COMMAND cd ${CMAKE_CURRENT_BINARY_DIR}/capstone
-                    && cmake -G "Unix Makefiles"
-                    -DCAPSTONE_BUILD_STATIC_LIBS=NO
-                    -DCAPSTONE_BUILD_SHARED_LIBS=OFF
-                    -S ${CMAKE_CURRENT_SOURCE_DIR}/3thrd/capstone
-                    -B ${CMAKE_CURRENT_BINARY_DIR}/capstone
-            INSTALL_COMMAND ""
-            STEP_TARGETS build
-        )
-    endif()
+    #    include(ExternalProject)
+    #if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/capstone)
+    #    ExternalProject_Add(libcapstone
+    #        PREFIX libcapstone
+    #        BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/capstone
+    #        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3thrd/capstone
+    #        CONFIGURE_COMMAND cd ${CMAKE_CURRENT_BINARY_DIR}/capstone
+    #               && cmake -G "Unix Makefiles"
+    #                -DCAPSTONE_BUILD_STATIC_LIBS=NO
+    #                -DCAPSTONE_BUILD_SHARED_LIBS=OFF
+    #                -S ${CMAKE_CURRENT_SOURCE_DIR}/3thrd/capstone
+    #                -B ${CMAKE_CURRENT_BINARY_DIR}/capstone
+    #        INSTALL_COMMAND ""
+    #        STEP_TARGETS build
+    #    )
+    #endif()
     #FetchContent_Declare(
     #capstone
     #GIT_REPOSITORY https://github.com/capstone-engine/capstone.git
@@ -236,7 +236,7 @@ function (add_funchook_library target_name target_type)
   set_target_properties(${target_name} PROPERTIES ${FUNCHOOK_PROPERTIES})
   target_include_directories(${target_name} PUBLIC include)
   target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}) # to include config.h
-  target_link_libraries(${target_name} PRIVATE ${FUNCHOOK_DEPS} ${CMAKE_CURRENT_BINARY_DIR}/capstone/libcapstone.a)
+  target_link_libraries(${target_name} PRIVATE ${FUNCHOOK_DEPS} ${CMAKE_BINARY_DIR}/capstone/libcapstone.a)
   if (HAVE_FVISIBILITY_HIDDEN)
     target_compile_options(${target_name} PRIVATE -fvisibility=hidden)
   endif ()
