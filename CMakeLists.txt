@@ -90,19 +90,21 @@ endfunction(add_subdirectory_pic)
 #
 if (DISASM_CAPSTONE)
     include(ExternalProject)
-    ExternalProject_Add(libcapstone
-        PREFIX libcapstone
-        BINARY_DIR ${CMAKE_BINARY_DIR}/capstone
-        SOURCE_DIR ${CMAKE_SOURCE_DIR}/3thrd/capstone
-        CONFIGURE_COMMAND cd ${CMAKE_BINARY_DIR}/capstone
+    if (NOT EXISTS ${CMAKE_BINARY_DIR}/capstone)
+        ExternalProject_Add(libcapstone
+            PREFIX libcapstone
+            BINARY_DIR ${CMAKE_BINARY_DIR}/capstone
+            SOURCE_DIR ${CMAKE_SOURCE_DIR}/3thrd/capstone
+            CONFIGURE_COMMAND cd ${CMAKE_BINARY_DIR}/capstone
                     && cmake -G "Unix Makefiles"
                     -DCAPSTONE_BUILD_STATIC_LIBS=NO
                     -DCAPSTONE_BUILD_SHARED_LIBS=OFF
                     -S ${CMAKE_SOURCE_DIR}/3thrd/capstone
                     -B ${CMAKE_BINARY_DIR}/capstone
-        INSTALL_COMMAND ""
-        STEP_TARGETS build
-    )
+            INSTALL_COMMAND ""
+            STEP_TARGETS build
+        )
+    endif()
     #FetchContent_Declare(
     #capstone
     #GIT_REPOSITORY https://github.com/capstone-engine/capstone.git
