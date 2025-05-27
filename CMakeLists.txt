@@ -236,7 +236,7 @@ function (add_funchook_library target_name target_type)
   set_target_properties(${target_name} PROPERTIES ${FUNCHOOK_PROPERTIES})
   target_include_directories(${target_name} PUBLIC include)
   target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR}) # to include config.h
-  target_link_libraries(${target_name} PRIVATE ${FUNCHOOK_DEPS} ${CMAKE_BINARY_DIR}/capstone/libcapstone.a)
+  target_link_libraries(${target_name} PRIVATE ${FUNCHOOK_DEPS} capstone) #${CMAKE_BINARY_DIR}/capstone/libcapstone.a)
   if (HAVE_FVISIBILITY_HIDDEN)
     target_compile_options(${target_name} PRIVATE -fvisibility=hidden)
   endif ()
